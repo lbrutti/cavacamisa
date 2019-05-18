@@ -1,5 +1,9 @@
 def play(hands, process, firstCardOnLeft=True, verbose=False, fast=True):
+    #configurazione iniziale
+    initialConf = hands
     a, b = hands  # hands are called a and b
+    initialA = a
+    initialB = b
     if not fast:
         print(process, "-", "Mani iniziali: ", hands)
     if not firstCardOnLeft:
@@ -53,9 +57,11 @@ def play(hands, process, firstCardOnLeft=True, verbose=False, fast=True):
 
         player = player * -1
 
-        if(tricks > 100):
-            print(process, "-", "Forse infinita:", hands)
-            return
+        if(a == initialA and b==initialB ):
+            print(process, "-", "siamo tornati da capo:", a,b)
+            print ("%s - Ci sono stati %d turni e %d prese" % (process, turns, tricks))
+            #commentato per vedere loop
+            return 0
 
         # print current status
         if verbose:
