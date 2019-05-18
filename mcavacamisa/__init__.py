@@ -32,7 +32,8 @@ def play(hands, process, firstCardOnLeft=True, verbose=False, fast=True):
                 break  # ran out of cards to play, game over...
 
             stack.append(next_card)  # add to the stack
-
+            #aggiungo stampa del mazzo in tavola
+            print("Mazzo corrente : ",stack) 
             if next_card == 0:
                 # not a court card
                 if battle_in_progress:
