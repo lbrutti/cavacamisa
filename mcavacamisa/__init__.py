@@ -1,72 +1,73 @@
-def play(hands, process, firstCardOnLeft=True, verbose=False, fast=True):
+def play(mani, process, firstCardOnLeft=True, verbose=False, fast=True):
     #configurazione iniziale
-    initialConf = hands
-    a, b = hands  # hands are called a and b
-    initialA = a
-    initialB = b
+    initialConf = mani
+    mazzo_giocatore_uno, mazzo_giocatore_due = mani  # mani are called mazzo_giocatore_uno and mazzo_giocatore_due
+    initialA = mazzo_giocatore_uno
+    initialB = mazzo_giocatore_due
     if not fast:
-        print(process, "-", "Mani iniziali: ", hands)
+        print(process, "-", "Mani iniziali: ", mani)
     if not firstCardOnLeft:
-        a.reverse()
-        b.reverse()
-    stack = []  # cards in the middle
-    turns = 0
-    tricks = 0
-    player = 1  # alternates between 1 and -1
-    while len(a) != 0 and len(b) != 0:  # game terminates when a or b's hands are empty
-        battle_in_progress = False
-        cards_to_play = 1
-        while cards_to_play > 0:  # current player may play up to cards_to_play cards
-            turns = turns + 1
+        mazzo_giocatore_uno.reverse()
+        mazzo_giocatore_due.reverse()
+    mazzo_in_tavola = []  # cards in the middle
+    turni = 0
+    prese = 0
+    giocatore = 1  # alternates between 1 and -1
+    while len(mazzo_giocatore_uno) != 0 and len(mazzo_giocatore_due) != 0:  # game terminates when mazzo_giocatore_uno or mazzo_giocatore_due's mani are empty
+        partita_in_corso = False
+        carte_da_buttare_nel_mazzo = 1
+        while carte_da_buttare_nel_mazzo > 0:  # current giocatore may play up to carte_da_buttare_nel_mazzo cards
+            turni = turni + 1
 
             try:
-                if player == 1:
-                    # grab next card from first character of string a
-                    next_card = a[0]
-                    a = a[1:]
+                if giocatore == 1:
+                    # grab next card from first character of string mazzo_giocatore_uno
+                    prossima_carta = mazzo_giocatore_uno[0]
+                    mazzo_giocatore_uno = mazzo_giocatore_uno[1:]
                 else:
-                    # grab next card from first character of string b
-                    next_card = b[0]
-                    b = b[1:]
+                    # grab next card from first character of string mazzo_giocatore_due
+                    prossima_carta = mazzo_giocatore_due[0]
+                    mazzo_giocatore_due = mazzo_giocatore_due[1:]
             except IndexError:
                 break  # ran out of cards to play, game over...
 
-            stack.append(next_card)  # add to the stack
+            mazzo_in_tavola.append(prossima_carta)  # add to the mazzo_in_tavola
             #aggiungo stampa del mazzo in tavola
-            print("Mazzo corrente : ",stack) 
-            if next_card == 0:
+            # print("Mazzo corrente : ",mazzo_in_tavola)
+            if prossima_carta == 0:
                 # not a court card
-                if battle_in_progress:
-                    # this player needs keep trying to find a court card
-                    cards_to_play = cards_to_play - 1
+                if partita_in_corso:
+                    # this giocatore needs keep trying to find a court card
+                    carte_da_buttare_nel_mazzo = carte_da_buttare_nel_mazzo - 1
                 else:
-                    player = player * -1  # no court cards found yet, back to other player
+                    giocatore = giocatore * -1  # no court cards found yet, back to other giocatore
             else:
-                # court card found, back to the other player
-                battle_in_progress = True
-                cards_to_play = next_card
-                player = player * -1
+                # court card found, back to the other giocatore
+                partita_in_corso = True
+                carte_da_buttare_nel_mazzo = prossima_carta
+                giocatore = giocatore * -1
 
-        # end of trick, make the losing player pick up the cards in the stack
-        tricks = tricks + 1
-        if player == 1:
-            b.extend(stack)
-            stack = []
+        # end of trick, make the losing giocatore pick up the cards in the mazzo_in_tavola
+        prese = prese + 1
+        if giocatore == 1:
+            #
+            mazzo_giocatore_uno.extend(mazzo_in_tavola)
+            mazzo_in_tavola = []
         else:
-            a.extend(stack)
-            stack = []
+            mazzo_giocatore_due.extend(mazzo_in_tavola)
+            mazzo_in_tavola = []
 
-        player = player * -1
+        giocatore = giocatore * -1
 
-        if(a == initialA and b==initialB ):
-            print(process, "-", "siamo tornati da capo:", a,b)
-            print ("%s - Ci sono stati %d turni e %d prese" % (process, turns, tricks))
+        if(mazzo_giocatore_uno == initialA and mazzo_giocatore_due==initialB ):
+            print(process, "-", "siamo tornati da capo:", mazzo_giocatore_uno,mazzo_giocatore_due)
+            print ("%s - Ci sono stati %d turni e %d prese" % (process, turni, prese))
             #commentato per vedere loop
             return 0
 
         # print current status
         if verbose:
-            print (process, "-", "Situazione:", a, b)
+            print (process, "-", "Situazione:", mazzo_giocatore_uno, mazzo_giocatore_due)
 
     if not fast:
-        print ("%s - Ci sono stati %d turni e %d prese" % (process, turns, tricks))
+        print ("%s - Ci sono stati %d turni e %d prese" % (process, turni, prese))
