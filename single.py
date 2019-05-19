@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 #invocazione python single.py  -v -m "0030202030310000031000100200002000000010"
+# 0100000002000020010001300000130302020300
+# 0010020000200000001000302020303100000310
 import mcavacamisa
 import random
 import time
@@ -12,7 +14,7 @@ import re
 myarg = sys.argv[1:]
 verbose = False
 fast = False
-inputmano = ""
+inputmano = "0030202030310000031000100200002000000010"
 
 try:
     opts, args = getopt.getopt(myarg, "m:fv", ["mano="])
@@ -45,8 +47,9 @@ start = time.time()
 
 # mano=[0,0,0,0,0,0,3,0,1,0,0,1,0,0,3,0,2,0,2,0]
 tmp=int(N/2)
-mcavacamisa.play((mano[0:tmp], mano[int(N / 2):N]),
-                 "Main", verbose=verbose, fast=fast)
+mazzo_a = mano[0:tmp]
+mazzo_b = mano[tmp:N]
+mcavacamisa.play((mazzo_a, mazzo_b),"Main",firstCardOnLeft=True, verbose=verbose, fast=fast)
 
 end = time.time()
 print(end - start)

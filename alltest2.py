@@ -17,7 +17,7 @@ def perm_it(start,N=float("inf")):
 		i+=1
 		if(i>N): break
 		yield (it,i)
-		
+
 def nth(iterable, n, default=None):
 	"Returns the nth item or a default value"
 	return next(itertools.islice(iterable, n, None), default)
@@ -45,60 +45,50 @@ def next_permutation(a):
     # Reverse sequence from a[i + 1] up to and including the final element a[n]
     a[i + 1:] = reversed(a[i + 1:])
     return True
-    
-    
-    
+
+
+
 def work(start,i,N):
 	mano = start
 	nomep = "Processo "+str(i)
 	print nomep, "- Starting from ",mano
-	mcavacamisa.play((mano[0:10],mano[10:20]),nomep,fast=False)
-	
+	mcavacamisa.play((mano[0:10],mano[10:20]),nomep,fast=True)
+
 	for m in perm_it(start,N):
 		i=m[1]
 		if (i%10000==0): print i
 		mano = m[0]
 		mcavacamisa.play((mano[0:10],mano[10:20]),nomep)
-	
+
 
 
 
 N=800000
 procs = 4
-	
-mazzo = [0]*14
-mazzo.extend([1,1,2,2,3,3])
 
-#mani=[[0,0,0,0,0,0,3,0,1,0,0,1,0,0,3,0,2,0,2,0]]
-
-mazzobig=[0]*19
-mazzobig.append(1)
-mazzobig.extend([0]*9)
-mazzobig.extend([1,1,1,2,2,2,2,3,3,3,3])
-#mazzobig = [0,2,0,0,0,1,0,0,0,3,0,0,0,3,0,0,0,2,0,3,0,0,2,0,0,3,0,0,1,0,2,1,0,0,0,0,1,0,0,0]
+mazzo = [0]*28
+mazzo.extend([1,1,1,1,2,2,2,2,3,3,3,3])
 
 print mazzo
 
-#mazzi = [list(nth(perm_it(mazzo),N*i)) for i in range(procs)]
-	
-start = time.time()	
+start = time.time()
 
 mazzi = []
 i = 0
 for m in perm_it(mazzo):
 	i=m[1]
-	if (i%N==0): 
+	if (i%N==0):
 		mano = list(m[0])
 		mazzi.append(mano)
 
-	
+
 print mazzi
 
 end = time.time()
 print(end - start)
 
 
-   
+
 start = time.time()
 
 jobs = []
@@ -107,7 +97,7 @@ for i in range(0, procs):
 	process = multiprocessing.Process(target=work, args=(mazzi[i],i,N))
 	jobs.append(process)
 
-# Start the processes (i.e. calculate the random number lists)		
+# Start the processes (i.e. calculate the random number lists)
 for j in jobs:
 	j.start()
 
